@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<title>Lola Juliawati (GForm)</title>
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+form {border: 3px solid #f1f1f1;}
+
+input[type=text], input[type=email], select {
+  width: 49% ;
+  font-size:20px ;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid rgb(247, 122, 170);
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #df3c6d;
+  color: rgb(255, 255, 255);
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+}
+
+img.avatar {
+  width: 20%;
+  border-radius: 50%;
+}
+
+
+</style>
+</head>
+<body style="background:rgb(255, 252, 252); background-image: url('https://wallpapercave.com/wp/wp4776521.jpg');">
+
+<center><h1 style="color:rgb(211, 58, 109)">Data Diri</h1></center>
+
+<form id="form" target="_self" onsubmit="return postToGoogle();" action="" autocomplete="off"> 
+<input id="nameField" name="entry.365506583" placeholder="Masukan Nama Anda" type="text" required> 
+<input id="emailField" name="entry.1993552392" placeholder="Masukan Alamat Email" type="email" required> 
+<input id="mobField" name="entry.247089883" placeholder="Masukan Nomor Telepon" type="text" required>  
+<input id="alamField" name="entry.1687095767" placeholder="Masukan Alamat" type="text" required> 
+<button id="send" type="submit" class="common_btn">Kirim Data</button>
+</form>
+
+<h3 id="success-msg" style="text-align: center !important; margin-top:190px !important; display:none; color:rgb(211, 58, 109)"> Terimakasih data anda sudah dikirim^^</h3>
+
+<img src="https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/rm32-chim-25-r-wall_1.jpg?w=800&dpr=1&fit=default&crop=default&q=65&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=ce019f37f9d94cd0a1341f0306b88118" style="width:100%; opacity:.4;">
+
+
+<script>
+function postToGoogle() {
+                var field1 = $("#nameField").val();
+                var field2 = $("#emailField").val();
+                var field3 = $("#mobField").val();
+                var field4 = $("#alamField").val();
+ 				
+				if(field1 == ""){
+					alert('Tolong Masukan Nama Kamu');
+					document.getElementById("nameField").focus();
+					return false;
+				}
+				if(field2 == ""){
+					alert('Tolong Masukan Alamat Email');
+					document.getElementById("emailField").focus();
+					return false;
+				}
+				if(field3 == ""){
+					alert('Tolong Masukan Nomor Telepon');
+					document.getElementById("mobField").focus();
+					return false;
+        }
+        if(field4 == ""){
+					alert('Tolong Masukan Alamat Kamu');
+					document.getElementById("alamField").focus();
+					return false;
+				}
+
+
+				
+	
+                $.ajax({
+                    url: "https://docs.google.com/forms/d/e/1FAIpQLSd8Y7jdml68Sm5993ZrGqgkDFg9DDOcf5fdWPVWWgXYHdcmJg/formResponse?",
+					data: {"entry.365506583": field1, "entry.1993552392": field2, "entry.247089883": field3, "entry.1687095767": field4},
+                    type: "POST",
+                    dataType: "xml",
+                    success: function(d)
+					{
+					},
+					error: function(x, y, z)
+						{
+
+							$('#success-msg').show();
+							$('#form').hide();
+							
+						}
+                });
+				return false;
+            }
+</script>
+</body>
+</html>
