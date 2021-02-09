@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF8">
+        <meta name="viewport" content="width=device-width, initial scale=1.0">
+        <title>Lola Juliawati(191624016)</title>
+    </head>
+
+<!--menghubungkan dengan CSS-->
+<link rel="stylesheet" href="style.css">
+<!--menghubungkan dengan file app.js -->
+<script src="app.js"></script>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-app.js"></script>
+
+<!--menambahkan datbase firebase-->
+<script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-database.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyAf3OmsR5iKJ_ssTrY-2PlH8hmvKHwq_JU",
+    authDomain: "newchatapp-12bc7.firebaseapp.com",
+    projectId: "newchatapp-12bc7",
+    storageBucket: "newchatapp-12bc7.appspot.com",
+    messagingSenderId: "63536072397",
+    appId: "1:63536072397:web:145351975ebf8e33764b84",
+    measurementId: "G-WEQY49M775"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+
+    <body>
+
+        <div id="wrapper">
+            <div id="menu">
+                <p class="welcome"> Tugas Projek UAS ApPem <br><br>
+                
+                </p>
+                <!--membuat list untuk menunjukan pesan-->
+                <div id="chatbox">
+                    <ul id="messages">
+
+                    </ul>
+                </div>
+            </div>
+            <!--membuat form untuk pesannya-->
+            <form onsubmit="return sendMessage();">
+                <input type="text" name="" id="message" class="usermsg" size="63" placeholder="Tulis Pesan..." autocomplete="off" />
+                <input type="submit" name="" class="button">
+            </form>
+        </div>
+
+    </body>
+<script>
+    let myName = prompt ("MASUKAN NAMA KAMU")
+
+    const sendMessage =() =>{
+        let message=document.getElementById("message").value
+        firebase.database().ref("messages").push().set({
+           "sender": myName,
+           "message": message
+        });
+        let message1 =document.getElementById("message")
+        message1.value=""
+            return false;
+    }
+
+    firebase.database().ref("messages").on("child_added", function (snapshot){
+        var html ="";
+           //memberikan ID ditiap pesan
+            html += "<li id= 'message-" + snapshot.key + "'>";
+                //menampilkan tombol delete jika pesan telah dikirim oleh pengirim
+                if(snapshot.val().sender == myName){
+                    html += "<button data-id='" + snapshot.key + "'onclick='deleteMessage(this);'>";
+                        html += "Delete";
+                        html += "</button>";
+                }
+        html += "{ "+ snapshot.val().sender + " } :" + snapshot.val().message;
+        html += "</li>";
+
+
+        document.getElementById("messages").innerHTML += html;
+    });
+
+function deleteMessage(self){
+    //dapatkan ID pesan
+    var messageId = self.getAttribute("data-id");
+
+    //hapus pesan
+    firebase.database().ref("messages").child(messageId).remove();
+}
+
+    //menampilkan pemberitahuan mendelete pesan
+    firebase.database().ref("messages").on("child_removed", function(snapshot){
+        //hapus node pesan
+        document.getElementById("message-" + snapshot.key).innerHTML ="Ups! pesan ini telah dihapus";
+    });
+</script>
+</html>
